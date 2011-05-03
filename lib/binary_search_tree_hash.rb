@@ -4,12 +4,11 @@ class BinarySearchTreeHash
   def initialize logger=nil
     @bst = BinarySearchTree.new logger
   end
-class BinarySearchTreeHash
+
   def clear
     @bst.clear
     self
   end
-end
 
   def empty?
     @bst.empty?
