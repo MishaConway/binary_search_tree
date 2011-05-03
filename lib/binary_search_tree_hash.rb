@@ -1,13 +1,15 @@
 class BinarySearchTreeHash
   include Enumerable
 
-  def initialize
-    @bst = BinarySearchTree.new  
+  def initialize logger=nil
+    @bst = BinarySearchTree.new logger
   end
-
+class BinarySearchTreeHash
   def clear
     @bst.clear
+    self
   end
+end
 
   def empty?
     @bst.empty?
@@ -24,6 +26,7 @@ class BinarySearchTreeHash
 
   def delete key
     @bst.remove key
+    self
   end
 
   def to_hash
@@ -46,7 +49,7 @@ class BinarySearchTreeHash
   end
 
   def to_s
-    map{ |node| "#{node.first}#{node.second}" }.join
+    '{' + map{ |node| "#{node.first} => #{node.second}" }.join(', ') + '}'
   end
 
   def min

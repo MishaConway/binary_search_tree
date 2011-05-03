@@ -33,7 +33,8 @@ end
 class BinarySearchTree
   attr_reader :size, :root
 
-  def initialize
+  def initialize logger=nil
+    @logger = logger
     clear
   end
 
@@ -49,6 +50,7 @@ class BinarySearchTree
   def find key
     @num_comparisons = 0
     node = locate key, @root
+    @logger.debug "find operation completed in #{@num_comparisons} lookups..." if @logger.present?
     node
   end
 
@@ -93,13 +95,13 @@ class BinarySearchTree
 
   def locate target, leaf
     @num_comparisons += 1
-    if leaf.nil? then
+    if leaf.nil?
       return nil
-    elsif leaf.key < target then
+    elsif leaf.key < target
       return locate target, leaf.right
-    elsif leaf.key > target then
+    elsif leaf.key > target
       return locate target, leaf.left
-    elsif leaf.key == target then
+    elsif leaf.key == target
       return leaf
     end
   end
@@ -474,3 +476,5 @@ class BinarySearchTree
 
 
 end
+
+require 'binary_search_tree_hash.rb'
