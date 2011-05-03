@@ -1,7 +1,6 @@
 This gem implements the two classes BinarySearchTree and BinarySearchTreeHash. BinarySearchTree is a self balancing avl tree.
-Most people will only need to be concerned with BinarySearchTreeHash as it is a wrapper over BinarySearchTree that provides the
-same interface as the native Ruby hash. This class is useful when you want a container that provides fast lookups with minimal
-memory footprint. Since it is self balancing, it will reorganize itself on every new insert to make subsequent lookups optimal.
+
+Most people will only need to be concerned with BinarySearchTreeHash as it is a wrapper over BinarySearchTree that provides the same interface as the native Ruby hash. This class is useful when you want a container that provides fast lookups with minimal memory footprint. Since it is self balancing, it will reorganize itself on every new insert to make subsequent lookups optimal.
 
 -----------------------------------------
 -----------------------------------------
