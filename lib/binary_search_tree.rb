@@ -68,7 +68,6 @@ class BinarySearchTree
   end
 
   def insert element, value
-    puts "Inserting #{element}"
     put element, value, @root, nil
   end
 
@@ -142,7 +141,6 @@ class BinarySearchTree
       leaf = BinaryNode.new element, value, parent
       @size += 1
       invalidate_cached_values
-      #if it is not the root node
       if parent.present?
         if 'left' == link_type
           parent.left = leaf
@@ -214,7 +212,7 @@ class BinarySearchTree
 
   def rrc_rebalance a, f
 
-     puts "performing rrc rebalance"
+    #puts "performing rrc rebalance"
     b = a.right
     c = b.right
     assert a.present? && b.present? && c.present?
@@ -241,7 +239,7 @@ class BinarySearchTree
 
   def rlc_rebalance a, f
 
-     puts "performing rlc rebalance"
+    #puts "performing rlc rebalance"
     b = a.right
     c = b.left
     assert a.present? && b.present? && c.present?
@@ -273,7 +271,7 @@ class BinarySearchTree
   end
 
   def llc_rebalance a, b, c, f
-    puts "performing llc rebalance"
+    #puts "performing llc rebalance"
     assert a.present? && b.present? && c.present?
     a.left = b.right
     if a.left
@@ -297,7 +295,7 @@ class BinarySearchTree
   end
 
   def lrc_rebalance a, b, c, f
-    puts "performing lrc rebalance"
+    #puts "performing lrc rebalance"
     assert a.present? && b.present? && c.present?
     a.left = c.right
     if a.left.present?

@@ -4,13 +4,10 @@ require 'binary_search_tree'
 describe BinarySearchTree do
   subject(:tree) { BinarySearchTree.new() }
 
-  # create a
   before(:each) do
-    puts "before each..."
     tree.insert(9, "nine")
     tree.insert(5, "five")
     tree.insert(10, "ten")
-
   end
 
   describe "#insert" do
@@ -18,7 +15,6 @@ describe BinarySearchTree do
       tree.insert(1, "one")
       tree.insert(3, "three")
       expect(tree.root.max_children_height).to eql(1)
-      puts "end first example"
     end
 
     it "remains balanced after insertion requiring an llc rebalance" do
@@ -42,7 +38,11 @@ describe BinarySearchTree do
 
   describe "#find" do
     it "finds a value when a value is present" do
-      expect(tree.find(9).value ).to eql("nine")
+      expect(tree.find(9).value).to eql("nine")
+    end
+
+    it "does not find a value that is not present" do
+      expect(tree.find(18)).to eql(nil)
     end
   end
 
@@ -51,11 +51,10 @@ describe BinarySearchTree do
       expect(tree.min.key).to eql(5)
     end
 
-    it "finds the minimum value" do
+    it "finds the minimum value after insert" do
       tree.insert(0.5, "half")
       expect(tree.min.key).to eql(0.5)
     end
-
   end
 
   describe "#max" do
@@ -91,10 +90,6 @@ describe BinarySearchTree do
        tree.nodes.count.should eql(4)
     end
   end
-
-
-
-
 
 end
 
