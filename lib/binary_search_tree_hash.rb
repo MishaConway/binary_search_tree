@@ -40,7 +40,7 @@ class BinarySearchTreeHash
   end
 
   def values
-    map{ |node| node.second }    
+    map{ |node| node.second }
   end
 
   def to_a
@@ -56,7 +56,7 @@ class BinarySearchTreeHash
   end
 
   def max
-    [@bst.max.key, @bst.max.value]    
+    [@bst.max.key, @bst.max.value]
   end
 
   def each
@@ -93,7 +93,7 @@ class BinarySearchTreeHash
         nodes[i] = nil
       end
     end
-    changed ? nodes.compact.map{ |node| [node.key, node.value] } : nil 
+    changed ? nodes.compact.map{ |node| [node.key, node.value] } : nil
   end
 
   def delete_if
@@ -129,7 +129,7 @@ class BinarySearchTreeHash
   end
 
   def has_value? value
-    @bst.find_value(value).present?  
+    @bst.find_value(value).present?
   end
 
   def value? value
@@ -186,3 +186,5 @@ private
     @bst
   end
 end
+
+
