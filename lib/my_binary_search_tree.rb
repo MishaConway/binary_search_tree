@@ -1,4 +1,3 @@
-require 'active_support/core_ext/object/blank'
 class BinaryNode
   attr_accessor :height, :parent, :left, :right, :key, :value
 
@@ -204,64 +203,72 @@ class BinarySearchTree
     raise "assertion failed" unless condition
   end
 
+  def rrc a, f
+    b = a.right
+    c = b.right
+    assert a.present? && b.present? && c.present?
+    a.right = b.left
+    if a.right.present?
+      a.right.parent = a
+    end
+    b.left = a
+    a.parent = b
+    if f.nil?
+      @root = b
+      @root.parent = nil
+    else
+      if f.right == a
+        f.right = b
+      else
+        f.left = b
+      end
+      b.parent = f
+    end
+    recompute_heights a
+    recompute_heights b.parent
+  end
+
+  def rlc
+    b = a.right
+    c = b.left
+    assert a.present? && b.present? && c.present?
+    b.left = c.right
+    if b.left.present?
+      b.left.parent = b
+    end
+    a.right = c.left
+    if a.right.present?
+      a.right.parent = a
+    end
+    c.right = b
+    b.parent = c
+    c.left = a
+    a.parent = c
+    if f.nil?
+      @root = c
+      @root.parent = nil
+    else
+      if f.right == a
+        f.right = c
+      else
+        f.left = c
+      end
+      c.parent = f
+    end
+    recompute_heights a
+    recompute_heights b
+  end
+
   def rebalance node_to_rebalance
     a = node_to_rebalance
     f = a.parent #allowed to be NULL
     if node_to_rebalance.balance_factor == -2
       if node_to_rebalance.right.balance_factor <= 0
         # """Rebalance, case RRC """
-        b = a.right
-        c = b.right
-        assert a.present? && b.present? && c.present?
-        a.right = b.left
-        if a.right.present?
-          a.right.parent = a
-        end
-        b.left = a
-        a.parent = b
-        if f.nil?
-          @root = b
-          @root.parent = nil
-        else
-          if f.right == a
-            f.right = b
-          else
-            f.left = b
-          end
-          b.parent = f
-        end
-        recompute_heights a
-        recompute_heights b.parent
+        rrc a, f
       else
+        rlc a, f
         # """Rebalance, case RLC """
-        b = a.right
-        c = b.left
-        assert a.present? && b.present? && c.present?
-        b.left = c.right
-        if b.left.present?
-          b.left.parent = b
-        end
-        a.right = c.left
-        if a.right.present?
-          a.right.parent = a
-        end
-        c.right = b
-        b.parent = c
-        c.left = a
-        a.parent = c
-        if f.nil?
-          @root = c
-          @root.parent = nil
-        else
-          if f.right == a
-            f.right = c
-          else
-            f.left = c
-          end
-          c.parent = f
-        end
-        recompute_heights a
-        recompute_heights b
       end
     else
       assert node_to_rebalance.balance_factor == 2

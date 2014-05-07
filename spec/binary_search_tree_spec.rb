@@ -1,57 +1,65 @@
 require 'rspec'
 require 'binary_search_tree'
 
-describe BinaryNode do
-  subject(:node) { BinaryNode.new(5, 5, nil) }
-  # its(:suit) { should be (:diamond) }
-  # its(:value) { should eql (:queen) }
+describe BinarySearchTree do
+  subject(:tree) { BinarySearchTree.new() }
 
-  describe "#is_leaf?" do
-    it "returns true when height is 0" do
-      expect(node.is_leaf?).to be_true
+  before(:each) do
+    tree.insert(9, "nine")
+    tree.insert(5, "five")
+    tree.insert(10, "ten")
+  end
+
+  describe "#min" do
+
+    it "finds the minimum value" do
+      expect(tree.min.key).to eql(5)
     end
 
-    it "returns false when height is not 0" do
-      node.height = 1
-      expect(node.is_leaf?).to be_false
+    it "finds the minimum value" do
+      tree.insert(2, "two")
+      expect(tree.min.key).to eql(2)
+    end
+
+    it "finds the maximum value" do
+      expect(tree.max.key).to eql(10)
+    end
+    
+  end
+
+  describe "#nodes" do
+    it "returns an array of nodes" do
+      expect(tree.nodes).to be_an(Array)
+      expect(tree.nodes[0]).to be_a(BinaryNode)
+    end
+
+    it "contains all the nodes that have been inserted" do
+       tree.nodes.count.should eql(3) 
+       tree.insert(1, "one")
+       tree.nodes.count.should eql(4)
+    end
+
+  end
+
+  describe "#remove_min" do
+    it "updates the minimum value after removing" do
+      expect(tree.min.key).to eql(5)
+      tree.remove_min
+      expect(tree.min.key).to eql(9)
     end
   end
 
-  describe "#max_children_height" do
+  describe "#remove" do
+    it "updates the number of nodes in the tree" do
 
-    before(:each) do
-      @left = double('left_child', :present? => true, :height => 3)
-      @right = double('right_child', :present? => true, :height => 2)
-      node.left, node.right = @left, @right
-    end
-    context "when both children are present and the left has a greater height" do
-      it "returns the value of the left child's height" do
-        expect(node.max_children_height).to eql(3)
-      end
-    end
-
-    context "when both children are present and right has a greater height" do
-      it "returns the value of the right child's height" do
-        @right.stub(:height).and_return(4)
-        expect(node.max_children_height).to eql(4)
-      end
-    end
-
-    context "when only the left child is present" do
-      it "returns the value of the left child's height" do
-        @right.stub(:present?).and_return(false)
-        expect(node.max_children_height).to eql(3)
-      end
-    end
-
-    context "when only the right child is present" do
-      it "returns the value of the right child's height" do
-        @left.stub(:present?).and_return(false)
-        expect(node.max_children_height).to eql(2)
-      end
+      tree.remove(5) 
+      expect(tree.min.key).to eql(9)
     end
   end
 
+  describe "#max" do
+    
+  end
 
 
 
