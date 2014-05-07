@@ -10,8 +10,13 @@ describe BinarySearchTree do
     tree.insert(10, "ten")
   end
 
-  describe "#min" do
+  describe "#find" do
+    it "finds a value when a value is present" do
+      expect(tree.find(9).value ).to eql("nine")
+    end
+  end
 
+  describe "#min" do
     it "finds the minimum value" do
       expect(tree.min.key).to eql(5)
     end
@@ -24,21 +29,12 @@ describe BinarySearchTree do
     it "finds the maximum value" do
       expect(tree.max.key).to eql(10)
     end
-    
   end
 
-  describe "#nodes" do
-    it "returns an array of nodes" do
-      expect(tree.nodes).to be_an(Array)
-      expect(tree.nodes[0]).to be_a(BinaryNode)
+  describe "#max" do
+    it "returns the maximum value" do
+      expect(tree.max.key).to eql(10)
     end
-
-    it "contains all the nodes that have been inserted" do
-       tree.nodes.count.should eql(3) 
-       tree.insert(1, "one")
-       tree.nodes.count.should eql(4)
-    end
-
   end
 
   describe "#remove_min" do
@@ -51,14 +47,22 @@ describe BinarySearchTree do
 
   describe "#remove" do
     it "updates the number of nodes in the tree" do
-
-      tree.remove(5) 
+      tree.remove(5)
       expect(tree.min.key).to eql(9)
     end
   end
 
-  describe "#max" do
-    
+  describe "#nodes" do
+    it "returns an array of nodes" do
+      expect(tree.nodes).to be_an(Array)
+      expect(tree.nodes[0]).to be_a(BinaryNode)
+    end
+
+    it "contains all the nodes that have been inserted" do
+       tree.nodes.count.should eql(3)
+       tree.insert(1, "one")
+       tree.nodes.count.should eql(4)
+    end
   end
 
 
