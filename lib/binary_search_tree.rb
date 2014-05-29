@@ -1,3 +1,4 @@
+require 'active_support/core_ext/object/blank'
 class BinaryNode
   attr_accessor :height, :parent, :left, :right, :key, :value
 
@@ -134,7 +135,9 @@ class BinarySearchTree
   end
 
   def put element, value, leaf, parent, link_type=nil
+    #once you reach a point where you can place a new node
     if leaf.nil?
+      #create that new node
       leaf = BinaryNode.new element, value, parent
       @size += 1
       invalidate_cached_values
@@ -148,8 +151,11 @@ class BinarySearchTree
         @root = leaf
       end
       if parent.present? && parent.height.zero?
+        #if it has a parent but it is balanced, move up
         node = parent
         node_to_rebalance = nil
+
+        #continue moving up until you git the root
         while node.present?
           node.height = node.max_children_height + 1
           if node.balance_factor.abs > 1
@@ -158,6 +164,7 @@ class BinarySearchTree
           end
           node = node.parent
         end
+        #if at any point you reach an unbalanced node, rebalance it
         rebalance node_to_rebalance if node_to_rebalance.present?
       end
 
@@ -203,64 +210,130 @@ class BinarySearchTree
     raise "assertion failed" unless condition
   end
 
+  def rrc_rebalance a, f
+
+    #puts "performing rrc rebalance"
+    b = a.right
+    c = b.right
+    assert a.present? && b.present? && c.present?
+    a.right = b.left
+    if a.right.present?
+      a.right.parent = a
+    end
+    b.left = a
+    a.parent = b
+    if f.nil?
+      @root = b
+      @root.parent = nil
+    else
+      if f.right == a
+        f.right = b
+      else
+        f.left = b
+      end
+      b.parent = f
+    end
+    recompute_heights a
+    recompute_heights b.parent
+  end
+
+  def rlc_rebalance a, f
+
+    #puts "performing rlc rebalance"
+    b = a.right
+    c = b.left
+    assert a.present? && b.present? && c.present?
+    b.left = c.right
+    if b.left.present?
+      b.left.parent = b
+    end
+    a.right = c.left
+    if a.right.present?
+      a.right.parent = a
+    end
+    c.right = b
+    b.parent = c
+    c.left = a
+    a.parent = c
+    if f.nil?
+      @root = c
+      @root.parent = nil
+    else
+      if f.right == a
+        f.right = c
+      else
+        f.left = c
+      end
+      c.parent = f
+    end
+    recompute_heights a
+    recompute_heights b
+  end
+
+  def llc_rebalance a, b, c, f
+    #puts "performing llc rebalance"
+    assert a.present? && b.present? && c.present?
+    a.left = b.right
+    if a.left
+      a.left.parent = a
+    end
+    b.right = a
+    a.parent = b
+    if f.nil?
+      @root = b
+      @root.parent = nil
+    else
+      if f.right == a
+        f.right = b
+      else
+        f.left = b
+      end
+      b.parent = f
+    end
+    recompute_heights a
+    recompute_heights b.parent
+  end
+
+  def lrc_rebalance a, b, c, f
+    #puts "performing lrc rebalance"
+    assert a.present? && b.present? && c.present?
+    a.left = c.right
+    if a.left.present?
+      a.left.parent = a
+    end
+    b.right = c.left
+    if b.right.present?
+      b.right.parent = b
+    end
+    c.left = b
+    b.parent = c
+    c.right = a
+    a.parent = c
+    if f.nil?
+      @root = c
+      @root.parent = nil
+    else
+      if f.right == a
+        f.right = c
+      else
+        f.left = c
+      end
+      c.parent = f
+    end
+    recompute_heights a
+    recompute_heights b
+  end
+
   def rebalance node_to_rebalance
     a = node_to_rebalance
     f = a.parent #allowed to be NULL
     if node_to_rebalance.balance_factor == -2
       if node_to_rebalance.right.balance_factor <= 0
         # """Rebalance, case RRC """
-        b = a.right
-        c = b.right
-        assert a.present? && b.present? && c.present?
-        a.right = b.left
-        if a.right.present?
-          a.right.parent = a
-        end
-        b.left = a
-        a.parent = b
-        if f.nil?
-          @root = b
-          @root.parent = nil
-        else
-          if f.right == a
-            f.right = b
-          else
-            f.left = b
-          end
-          b.parent = f
-        end
-        recompute_heights a
-        recompute_heights b.parent
+        rrc_rebalance a, f
       else
+        rlc_rebalance a, f
         # """Rebalance, case RLC """
-        b = a.right
-        c = b.left
-        assert a.present? && b.present? && c.present?
-        b.left = c.right
-        if b.left.present?
-          b.left.parent = b
-        end
-        a.right = c.left
-        if a.right.present?
-          a.right.parent = a
-        end
-        c.right = b
-        b.parent = c
-        c.left = a
-        a.parent = c
-        if f.nil?
-          @root = c
-          @root.parent = nil
-        else
-          if f.right == a
-            f.right = c
-          else
-            f.left = c
-          end
-          c.parent = f
-        end
-        recompute_heights a
-        recompute_heights b
       end
     else
       assert node_to_rebalance.balance_factor == 2
@@ -268,56 +341,12 @@ class BinarySearchTree
         b = a.left
         c = b.left
         # """Rebalance, case LLC """
-        assert a.present? && b.present? && c.present?
-        a.left = b.right
-        if a.left
-          a.left.parent = a
-        end
-        b.right = a
-        a.parent = b
-        if f.nil?
-          @root = b
-          @root.parent = nil
-        else
-          if f.right == a
-            f.right = b
-          else
-            f.left = b
-          end
-          b.parent = f
-        end
-        recompute_heights a
-        recompute_heights b.parent
+        llc_rebalance a, b, c, f
       else
         b = a.left
         c = b.right
         #  """Rebalance, case LRC """
-        assert a.present? && b.present? && c.present?
-        a.left = c.right
-        if a.left.present?
-          a.left.parent = a
-        end
-        b.right = c.left
-        if b.right.present?
-          b.right.parent = b
-        end
-        c.left = b
-        b.parent = c
-        c.right = a
-        a.parent = c
-        if f.nil?
-          @root = c
-          @root.parent = nil
-        else
-          if f.right == a
-            f.right = c
-          else
-            f.left = c
-          end
-          c.parent = f
-        end
-        recompute_heights a
-        recompute_heights b
+        lrc_rebalance a, b, c, f
       end
     end
   end
@@ -477,4 +506,17 @@ class BinarySearchTree
 
 end
 
-require 'binary_search_tree_hash.rb'
+# #require 'binary_search_tree_hash.rb'
+# tree = BinarySearchTree.new
+# puts "inserting 9"
+# tree.insert(9, "nine")
+# puts "inserting 5"
+# tree.insert(5, "five")
+# puts "inserting 10"
+# tree.insert(10, "ten")
+# puts "inserting 1"
+# tree.insert(1, "ten")
+# puts "inserting 3"
+# tree.insert(3, "ten")
+# puts "inserting 7"
+# tree.insert(7, "ten")
