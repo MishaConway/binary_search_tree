@@ -16,7 +16,7 @@ class BinarySearchTreeHash
 
   def [] key
     node = @bst.find key
-    node.present?? node.value : nil
+    node.nil?? nil : node.value
   end
 
   def []=(key, value)
@@ -40,15 +40,15 @@ class BinarySearchTreeHash
   end
 
   def values
-    map{ |node| node.second }
+    map{ |node| node.last }
   end
 
   def to_a
-    map{ |node| [node.first, node.second] }
+    map{ |node| [node.first, node.last] }
   end
 
   def to_s
-    '{' + map{ |node| "#{node.first} => #{node.second}" }.join(', ') + '}'
+    '{' + map{ |node| "#{node.first} => #{node.last}" }.join(', ') + '}'
   end
 
   def min
@@ -113,7 +113,7 @@ class BinarySearchTreeHash
   alias :length :size
 
   def has_key? key
-    @bst.find(key).present?
+    !!@bst.find(key)
   end
 
   def include? key
@@ -129,7 +129,7 @@ class BinarySearchTreeHash
   end
 
   def has_value? value
-    @bst.find_value(value).present?
+    !!@bst.find_value(value)
   end
 
   def value? value
@@ -147,7 +147,7 @@ class BinarySearchTreeHash
 
   def shift
     deleted_node = @bst.remove_min
-    deleted_node.present?? [deleted_node.key, deleted_node.value] : nil
+    deleted_node.nil?? nil : [deleted_node.key, deleted_node.value]
   end
 
   def invert

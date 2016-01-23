@@ -76,6 +76,13 @@ describe BinarySearchTree do
       tree.remove(5)
       expect(tree.min.key).to eql(9)
     end
+
+    it "doesn't corrupt tree" do
+      tree.remove 10
+      tree.remove 9
+
+      expect(tree.nodes.size).to eql(tree.size)
+    end
   end
 
   describe "#nodes" do
