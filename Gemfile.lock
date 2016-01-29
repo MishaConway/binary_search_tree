@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    binary_search_tree (2.1)
+    binary_search_tree (2.2)
 
 GEM
   remote: https://rubygems.org/

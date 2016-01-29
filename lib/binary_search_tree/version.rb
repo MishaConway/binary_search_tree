@@ -1,3 +1,3 @@
 module BinarySearch
-  VERSION = "2.1"
+  VERSION = "2.2"
 end
