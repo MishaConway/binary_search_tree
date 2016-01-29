@@ -1,6 +1,14 @@
 class BinarySearchTree
   attr_reader :size, :root
 
+  def balanced?
+    if -1 == compute_and_check_height(@root)
+      false
+    else
+      true
+    end
+  end
+
   def initialize logger=nil
     @logger = logger
     clear
@@ -178,8 +186,6 @@ class BinarySearchTree
   end
 
   def rrc_rebalance a, f
-
-    #puts "performing rrc rebalance"
     b = a.right
     c = b.right
     assert a && b && c
@@ -205,8 +211,6 @@ class BinarySearchTree
   end
 
   def rlc_rebalance a, f
-
-    #puts "performing rlc rebalance"
     b = a.right
     c = b.left
     assert a && b && c
@@ -238,7 +242,6 @@ class BinarySearchTree
   end
 
   def llc_rebalance a, b, c, f
-    #puts "performing llc rebalance"
     assert a && b && c
     a.left = b.right
     if a.left
@@ -262,7 +265,6 @@ class BinarySearchTree
   end
 
   def lrc_rebalance a, b, c, f
-    #puts "performing lrc rebalance"
     assert a && b && c
     a.left = c.right
     if a.left
@@ -368,46 +370,47 @@ class BinarySearchTree
     # rebalance
     node = parent
     while node
-      rebalance node if node.balance_factor.abs > 1
+      rebalance node unless [-1, 0, 1].include? node.balance_factor
       node = node.parent
     end
   end
 
 
+
+
   def remove_branch node
-    parent = node.parent
-    if parent
-      if parent.left == node
-        if node.right
-          parent.left = node.right
+      parent = node.parent
+      if parent
+        if parent.left == node
+          parent.left = node.right || node.left
         else
-          parent.left = node.left
+            assert parent.right == node
+            parent.right = node.right || node.left
         end
-      else
-        assert parent.right == node
-        if node.right
-          parent.right = node.right
+        if node.left
+            node.left.parent = parent
         else
-          parent.right = node.left
+            assert node.right
+            node.right.parent = parent
         end
-      end
-      if node.left
-        node.left.parent = parent
+        recompute_heights parent
       else
-        assert node.right
-        node.right.parent = parent
+        if node.left
+          @root = node.left
+          node.left.parent = nil
+        else
+          @root = node.right
+          node.right.parent = nil
+        end
+        recompute_heights @root
       end
-      recompute_heights parent
 
-    end
-
-    #del node
-    # rebalance
-    node = parent
-    while node
-      rebalance node if node.balance_factor.abs > 1
-      node = node.parent
-    end
+      # rebalance
+      node = parent
+      while node
+        rebalance node unless [-1,0,1].include? node.balance_factor
+        node = node.parent
+      end
   end
 
   def swap_with_successor_and_remove node
@@ -470,20 +473,21 @@ class BinarySearchTree
     end
   end
 
+  def compute_and_check_height root
+    return 0 if root.nil?
+    left_sub_tree_height = compute_and_check_height root.left
+    return -1 if -1 == left_sub_tree_height
 
+    right_sub_tree_height = compute_and_check_height root.right
+    return -1 if -1 == right_sub_tree_height
+
+    height_difference = (left_sub_tree_height - right_sub_tree_height).abs;
+
+    if height_difference > 1
+      -1
+    else
+      [left_sub_tree_height, right_sub_tree_height].max + 1
+    end
+  end
 end
 
-# #require 'binary_search_tree_hash.rb'
-# tree = BinarySearchTree.new
-# puts "inserting 9"
-# tree.insert(9, "nine")
-# puts "inserting 5"
-# tree.insert(5, "five")
-# puts "inserting 10"
-# tree.insert(10, "ten")
-# puts "inserting 1"
-# tree.insert(1, "ten")
-# puts "inserting 3"
-# tree.insert(3, "ten")
-# puts "inserting 7"
-# tree.insert(7, "ten")

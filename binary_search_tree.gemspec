@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.authors = ["Misha Conway"]
   s.date = "2014-05-29"
   s.email = "MishaAConway@gmail.com"
-  s.files = ["lib/binary_search_tree.rb", "lib/binary_search_tree_hash.rb"]
+  s.files = `git ls-files -z`.split("\x0")
   s.licenses = ["MIT"]
   s.rubyforge_project = "nowarning"
   s.rubygems_version = "2.4.5"

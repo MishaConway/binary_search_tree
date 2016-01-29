@@ -25,6 +25,18 @@ class BinaryNode
   end
 
   def balance_factor
-    (left.height rescue -1) - (right.height rescue -1)
+    left_height = if left
+                    left.height
+                  else
+                    -1
+                  end
+
+    right_height = if right
+                     right.height
+                   else
+                     -1
+                   end
+
+    left_height - right_height
   end
 end

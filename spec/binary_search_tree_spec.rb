@@ -78,9 +78,14 @@ describe BinarySearchTree do
     end
 
     it "doesn't corrupt tree" do
+      puts "about to remove 10"
       tree.remove 10
-      tree.remove 9
+      expect(tree.balanced?).to eql(true)
+      expect(tree.nodes.size).to eql(tree.size)
 
+      puts "about to remove 9"
+      tree.remove 9
+      expect(tree.balanced?).to eql(true)
       expect(tree.nodes.size).to eql(tree.size)
     end
   end
