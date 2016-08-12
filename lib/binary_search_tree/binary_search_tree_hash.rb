@@ -1,7 +1,7 @@
 class BinarySearchTreeHash
   include Enumerable
 
-  def initialize logger=nil
+  def initialize(logger = nil)
     @bst = BinarySearchTree.new logger
   end
 
@@ -14,41 +14,41 @@ class BinarySearchTreeHash
     @bst.empty?
   end
 
-  def [] key
+  def [](key)
     node = @bst.find key
-    node.nil?? nil : node.value
+    node.nil? ? nil : node.value
   end
 
   def []=(key, value)
     @bst.insert key, value
   end
 
-  def delete key
+  def delete(key)
     @bst.remove key
     self
   end
 
   def to_hash
     h = {}
-    each{ |key, value| h[key] = value }
+    each { |key, value| h[key] = value }
     h
   end
-  alias :to_h :to_hash
+  alias to_h to_hash
 
   def keys
-    map{ |node| node.first }
+    map(&:first)
   end
 
   def values
-    map{ |node| node.last }
+    map(&:last)
   end
 
   def to_a
-    map{ |node| [node.first, node.last] }
+    map { |node| [node.first, node.last] }
   end
 
   def to_s
-    '{' + map{ |node| "#{node.first} => #{node.last}" }.join(', ') + '}'
+    '{' + map { |node| "#{node.first} => #{node.last}" }.join(', ') + '}'
   end
 
   def min
@@ -64,36 +64,36 @@ class BinarySearchTreeHash
   end
 
   def each_key
-    @bst.nodes.each{ |node| yield node.key }
+    @bst.nodes.each { |node| yield node.key }
   end
 
   def each_value
-    @bst.nodes.each{ |node| yield node.value }
+    @bst.nodes.each { |node| yield node.value }
   end
 
   def each_pair
-    @bst.nodes.each{ |node| yield node.key, node.value }
+    @bst.nodes.each { |node| yield node.key, node.value }
   end
 
   def select
-    @bst.nodes.select{ |node| yield node.key, node.value }.map{ |node| [node.key, node.value] }
+    @bst.nodes.select { |node| yield node.key, node.value }.map { |node| [node.key, node.value] } # rubocop:disable Metrics/LineLength
   end
 
   def reject
-    @bst.nodes.reject{ |node| yield node.key, node.value }.map{ |node| [node.key, node.value] }
+    @bst.nodes.reject { |node| yield node.key, node.value }.map { |node| [node.key, node.value] } # rubocop:disable Metrics/LineLength
   end
 
   def reject!
     changed = false
     nodes = @bst.nodes
     nodes.each_with_index do |node, i|
-      if yield node.key, node.value
+      if yield node.key, node.value # rubocop:disable Style/Next:
         changed = true
         @bst.remove node
         nodes[i] = nil
       end
     end
-    changed ? nodes.compact.map{ |node| [node.key, node.value] } : nil
+    changed ? nodes.compact.map { |node| [node.key, node.value] } : nil
   end
 
   def delete_if
@@ -104,87 +104,78 @@ class BinarySearchTreeHash
         nodes[i] = nil
       end
     end
-    nodes.compact.map{ |node| [node.key, node.value] }
+    nodes.compact.map { |node| [node.key, node.value] }
   end
 
   def size
     @bst.size
   end
-  alias :length :size
+  alias length size
 
-  def has_key? key
+  def key?(key)
     !!@bst.find(key)
   end
+  alias has_key? key?
 
-  def include? key
-    has_key? key
+  def include?(key)
+    key? key
   end
 
-  def key? key
-    has_key? key
+  def member?(key)
+    key? key
   end
 
-  def member? key
-    has_key? key
-  end
-
-  def has_value? value
+  def value?(value)
     !!@bst.find_value(value)
   end
+  alias has_value? value?
 
-  def value? value
-    has_value? value
-  end
-
-  def key value
+  def key(value)
     @bst.find_value(value).key
   end
 
-  def values_at key, *extra_keys
-    #TODO: optimize this so that only one tree traversal occurs
-    ([key] + extra_keys).map{ |key| @bst.find(key).value }
+  def values_at(key, *extra_keys)
+    # TODO: optimize this so that only one tree traversal occurs
+    ([key] + extra_keys).map { |k| @bst.find(k).value }
   end
 
   def shift
     deleted_node = @bst.remove_min
-    deleted_node.nil?? nil : [deleted_node.key, deleted_node.value]
+    deleted_node.nil? ? nil : [deleted_node.key, deleted_node.value]
   end
 
   def invert
     inverted_bst_hash = BinarySearchTreeHash.new
-    each{ |key, value| inverted_bst_hash[value] = key }
+    each { |key, value| inverted_bst_hash[value] = key }
     inverted_bst_hash
   end
 
-  def replace other_bst_hash
+  def replace(other_bst_hash)
     clear
     merge! other_bst_hash
   end
 
-  def merge other_bst_hash
+  def merge(other_bst_hash)
     merged_hash = BinarySearchTreeHash.new
-    each{ |key, value| merged_hash[key] = value}
-    other_bst_hash.each{ |key, value| merged_hash[key] = value }
+    each { |key, value| merged_hash[key] = value }
+    other_bst_hash.each { |key, value| merged_hash[key] = value }
     merged_hash
   end
 
-  def merge! other_bst_hash
-    other_bst_hash.each{ |key, value| self[key] = value }
+  def merge!(other_bst_hash)
+    other_bst_hash.each { |key, value| self[key] = value }
     self
   end
 
-  def update other_bst_hash
+  def update(other_bst_hash)
     merge! other_bst_hash
   end
 
-  def == other_bst_hash
-    bst == other_bst_hash.send(:bst)
+  def ==(other)
+    bst == other.send(:bst)
   end
 
-private
-  def bst
-    @bst
-  end
+  private
+
+  attr_reader :bst
 end
-
-

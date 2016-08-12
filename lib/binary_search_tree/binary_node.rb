@@ -1,16 +1,17 @@
 class BinaryNode
   attr_accessor :height, :parent, :left, :right, :key, :value
 
-  def initialize key, value, parent
+  def initialize(key, value, parent)
     @key = key
     @value = value
     @parent = parent
     @height = 0
   end
 
-  def is_leaf?
+  def leaf?
     height.zero?
   end
+  alias is_leaf? leaf?
 
   def max_children_height
     if left && right
