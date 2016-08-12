@@ -1,5 +1,6 @@
 # binary_search_tree
 
+[![Build Status](https://travis-ci.org/MishaConway/binary_search_tree.svg?branch=master)](https://travis-ci.org/MishaConway/binary_search_tree)
 [![Gem Version](http://img.shields.io/gem/v/binary_search_tree.svg)](https://rubygems.org/gems/binary_search_tree)
 
 This gem implements the two classes BinarySearchTree and BinarySearchTreeHash. BinarySearchTree is a self balancing avl tree.
