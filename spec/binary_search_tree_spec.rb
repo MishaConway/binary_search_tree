@@ -78,12 +78,10 @@ describe BinarySearchTree do
     end
 
     it "doesn't corrupt tree" do
-      puts 'about to remove 10'
       tree.remove 10
       expect(tree.balanced?).to eql(true)
       expect(tree.nodes.size).to eql(tree.size)
 
-      puts 'about to remove 9'
       tree.remove 9
       expect(tree.balanced?).to eql(true)
       expect(tree.nodes.size).to eql(tree.size)
@@ -97,9 +95,9 @@ describe BinarySearchTree do
     end
 
     it 'contains all the nodes that have been inserted' do
-      tree.nodes.count.should eql(3)
+      expect(tree.nodes.count).to eql(3)
       tree.insert(11, 'eleven')
-      tree.nodes.count.should eql(4)
+      expect(tree.nodes.count).to eql(4)
     end
   end
 end

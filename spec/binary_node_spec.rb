@@ -3,8 +3,11 @@ require 'binary_search_tree'
 
 describe BinaryNode do
   subject(:node) { BinaryNode.new(5, 'five', nil) }
-  # its(:key) { should be (5) }
-  # its(:value) { should eql ("five") }
+
+  it 'creates node correctly' do
+    expect(node.key).to eq(5)
+    expect(node.value).to eq('five')
+  end
 
   describe '#leaf?' do
     it 'returns true when height is 0' do
@@ -33,7 +36,7 @@ describe BinaryNode do
 
     context 'when both children are present and right has a greater height' do
       it "returns the value of the right child's height" do
-        @right.stub(:height).and_return(4)
+        allow(@right).to receive(:height).and_return(4)
         expect(node.max_children_height).to eql(4)
       end
     end
@@ -67,13 +70,13 @@ describe BinaryNode do
     end
 
     it 'returns the correct height when the right is greater' do
-      @right.stub(:height).and_return(5)
+      allow(@right).to receive(:height).and_return(5)
       expect(node.balance_factor).to eql(-2)
     end
 
     it 'returns the correct height when both are zero' do
-      @right.stub(:height).and_return(0)
-      @left.stub(:height).and_return(0)
+      allow(@right).to receive(:height).and_return(0)
+      allow(@left).to receive(:height).and_return(0)
       expect(node.balance_factor).to eql(0)
     end
   end
