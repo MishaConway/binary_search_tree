@@ -1,16 +1,33 @@
-Installation:
-gem install binary_search_tree
+# binary_search_tree
 
-Info:
+[![Build Status](https://travis-ci.org/MishaConway/binary_search_tree.svg?branch=master)](https://travis-ci.org/MishaConway/binary_search_tree)
+[![Gem Version](http://img.shields.io/gem/v/binary_search_tree.svg)](https://rubygems.org/gems/binary_search_tree)
+
 This gem implements the two classes BinarySearchTree and BinarySearchTreeHash. BinarySearchTree is a self balancing avl tree.
 
 Most people will only need to be concerned with BinarySearchTreeHash as it is a wrapper over BinarySearchTree that provides the same interface as the native Ruby hash. This class is useful when you want a container that provides fast lookups with minimal memory footprint. Since it is self balancing, it will reorganize itself on every new insert to make subsequent lookups optimal.
 
------------------------------------------
------------------------------------------
---Example usage of BinarySearchTreeHash--
------------------------------------------
------------------------------------------
+## Installation
+
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'binary_search_tree'
+```
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install binary_search_tree
+
+## Usage
+
+### Example usage of BinarySearchTreeHash
+
+```
 ruby-1.9.2> h = BinarySearchTreeHash.new logger     (note: passing a logger is optional)
  => {}
 ruby-1.9.2> (1..100).each{|i| h[i] = i*1000}
@@ -39,12 +56,11 @@ ruby-1.9.2> h.delete 50
   DEBUG - [03/May/2011 15:03:48] "find operation completed in 6 lookups..."
 ruby-1.9.2> h.size
  => 99
+```
 
----------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------
---Example usage of BinarySearchTree (only use this if you want something lower level)--
----------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------
+### Example usage of BinarySearchTree (only use this if you want something lower level)
+
+```
 ruby-1.9.2> b = BinarySearchTree.new logger   (note: passing a logger is optional)
 ruby-1.9.2> b.insert 45, 78
 ruby-1.9.2> b.insert 23, 5
@@ -73,4 +89,12 @@ ruby-1.9.2> b.clear
  => 0
 ruby-1.9.2> b.size
  => 0
+```
 
+## Contributing
+
+1. Fork it ( https://github.com/MishaConway/binary_search_tree/fork )
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create a new Pull Request
