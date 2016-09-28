@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in conversocial.gemspec
+# Specify your gem's dependencies in binary_search_tree.gemspec
 gemspec
